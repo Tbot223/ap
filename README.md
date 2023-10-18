@@ -1,5 +1,5 @@
 # ap
 
-need module : 
+# need module : 
 
-pip install googletrans
+googletrans, datetime, cryptography
