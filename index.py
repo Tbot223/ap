@@ -1,6 +1,7 @@
 import os
 import googletrans
 import time
+import datetime
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import hashes
@@ -8,9 +9,26 @@ from cryptography.hazmat.primitives.asymmetric import padding
 
 DBpath = os.getcwd()+"/DB"
 
+#보조 함수들
+def translate_f(words):
+    list = os.listdir(DBpath+"/번역_기능_DB/")
+    listnum = len(list)
+    if listnum == 5:
+        os.remove(f"{DBpath}/번역_기능_DB/{list[0]}")
+    os.chdir(DBpath+"/번역_기능_DB")
+    title = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    with open(f"{title}.txt", "w", encoding="utf-8") as file:
+        file.write(words)
+
+#메인 함수들
 def index():
-    print("****** 실행할 기능 선택 ******")
+    list = ["번역_기능_DB", "양방향_암호화_DB"]
+    if list != os.listdir(DBpath):
+        os.mkdir("번역_기능_DB")
+        os.mkdir("양방향_암호화_DB")
     print("""
+    ****** 실행할 기능 선택 ******
+          
     * * * * * * * * * * * * * * *
     *                           *
     *    1. 끄기 (말 그대로)    *
@@ -48,17 +66,26 @@ def translate():
     print("------------------------------")
     print("")
     if AorB == "A" or AorB == "a":
-        print(f"번역한 문장이나 단어(ko to en) : {string} -> {translator.translate(string, dest='en').text}")
+        a = translator.translate(string, dest='en').text
+        print(f"번역한 문장이나 단어(ko to en) : {string} -> {a}")
+        translate_f(a)
+        print("DB에도 자동으로 저장됩니다.(최근 5회까지)")
         print("")
         print("------------------------------")
         time.sleep(5)
         index()
     elif AorB == "B" or AorB == "b":
-        print(f"번역한 문장이나 단어(en to ko) : {string} -> {translator.translate(string, dest='ko').text}")
+        a = translator.translate(string, dest='ko').text
+        print(f"번역한 문장이나 단어(en to ko) : {string} -> {a}")
+        translate_f(a)
+        print("DB에도 자동으로 저장됩니다.(최근 5회까지)")
         print("")
         print("------------------------------")
         time.sleep(5)
         index()
+    else:
+        print("잘못된 입력입니다. 다시 시도해보세요.")
+        translate()
 
 def exit():
     os.system("pause")
@@ -87,7 +114,7 @@ def enc():
         print("암호화된 문자열 : ", encrypted)
         time.sleep(2)
         print("")
-        os.chdir(DBpath)
+        os.chdir(DBpath+"/양방향_암호화_DB")
         pem = private_key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.PKCS8,
@@ -103,12 +130,14 @@ def enc():
 
 
     elif dncorenc == "dnc":
-        os.chdir(DBpath)
+        os.chdir(DBpath+"/양방향_암호화_DB")
         with open("encrypted.txt", "rb") as file:
             encrypted = file.read()
         time.sleep(2)
-        with open("private_key.pem", "r") as file:
-            private_key = file.read().encode("utf-8")
+        with open('private_key.pem', 'rb') as key_file:
+            private_key = serialization.load_pem_private_key(
+                key_file.read(),
+                password=None)
         original_message = private_key.decrypt(
         encrypted,
         padding.OAEP(
@@ -117,7 +146,7 @@ def enc():
             label=None
             )
         )
-        print("복호화된 문자열 : ", original_message)
+        print("복호화된 문자열 :", original_message.decode('utf8'))
         time.sleep(5)
         index()
     else:
