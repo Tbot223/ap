@@ -1,7 +1,7 @@
 # ap
 
-need module : 
+# need module : 
 
-# pip install googletrans
-# pip install datetime
-# pip install cryptography
+ pip install googletrans
+ pip install datetime
+ pip install cryptography
