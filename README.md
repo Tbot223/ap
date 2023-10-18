@@ -2,6 +2,4 @@
 
 # need module : 
 
- pip install googletrans
- pip install datetime
- pip install cryptography
+googletrans, datetime, cryptography
