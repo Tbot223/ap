@@ -7,7 +7,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
-DBpath = os.getcwd()+"/DB"
+path = os.getcwd()
+DBpath = f"{path}/DB"
 
 #보조 함수들
 def translate_f(words):
@@ -24,6 +25,7 @@ def translate_f(words):
 def index():
 
     if "DB" not in os.listdir(os.getcwd()):
+        os.chdir(path)
         os.mkdir("DB")
     list = ["번역_기능_DB", "양방향_암호화_DB"]
     DBlist = os.listdir(DBpath)
