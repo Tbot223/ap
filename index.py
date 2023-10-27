@@ -23,8 +23,8 @@ def translate_f(words):
 
 #메인 함수들
 def index():
+    os.chdir(path)
     if "DB" not in os.listdir(os.getcwd()):
-        os.chdir(path)
         os.mkdir("DB")
     list = ["번역_기능_DB", "양방향_암호화_DB"]
     DBlist = os.listdir(DBpath)
