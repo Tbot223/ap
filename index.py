@@ -16,7 +16,7 @@ def translate_f(words):
     if listnum == 5:
         os.remove(f"{DBpath}/번역_기능_DB/{list[0]}")
     os.chdir(DBpath+"/번역_기능_DB")
-    title = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    title = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(f"{title}.txt", "w", encoding="utf-8") as file:
         file.write(words)
 
